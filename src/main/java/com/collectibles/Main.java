@@ -2,56 +2,55 @@ package com.collectibles;
 
 import static spark.Spark.*;
 import com.google.gson.Gson;
-import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Main class for the Collectibles Store API.
- * Implements CRUD routes for users using Spark Java.
- */
+import java.util.*;
+
 public class Main {
 
-    // Logger instance for console output
+    // Logger instance for debugging and info logs
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    // Gson instance for converting between JSON and Java objects
+    // Gson instance for JSON handling
     private static final Gson gson = new Gson();
 
-    // Simple in-memory user storage (Map simulating a database)
-    private static final Map<String, User> users = new HashMap<>();
+    // In-memory user storage (used instead of a database for simplicity)
+    private static final Map<Integer, User> users = new HashMap<>();
 
     public static void main(String[] args) {
-        // Set the port where Spark will listen (default: 4567)
+
+        // Start the Spark server on port 4567
         port(4567);
 
-        logger.info("🚀 Starting Collectibles Store API on http://localhost:4567 ...");
+        // Log server startup
+        logger.info("🚀 Starting Collectibles Store API on http://localhost:4567");
 
-        // Define routes for the REST API
-        defineRoutes();
+        // Add some sample users for testing
+        users.put(1, new User(1, "Luis Mendoza", "luis@example.com"));
+        users.put(2, new User(2, "Emilio Flores", "emilio@example.com"));
+        users.put(3, new User(3, "Ana Torres", "ana@example.com"));
 
-        // Graceful shutdown message
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            logger.info("🛑 Server stopped.");
-        }));
-    }
+        // Root route to check if the server is running
+        get("/", (req, res) -> {
+            res.type("application/json");
+            return gson.toJson(Map.of(
+                "message", "Welcome to the Collectibles Store API 👋",
+                "available_routes", List.of("/users", "/users/:id")
+            ));
+        });
 
-    /**
-     * Defines all API routes for user operations.
-     */
-    private static void defineRoutes() {
-
-        // GET /users — Retrieve all users
+        // Retrieve all users
         get("/users", (req, res) -> {
             res.type("application/json");
+            logger.info("GET /users - Retrieving all users");
             return gson.toJson(users.values());
         });
 
-        // GET /users/:id — Retrieve user by ID
+        // Retrieve user by ID
         get("/users/:id", (req, res) -> {
             res.type("application/json");
-            String id = req.params(":id");
-
+            int id = Integer.parseInt(req.params(":id"));
             User user = users.get(id);
             if (user == null) {
                 res.status(404);
@@ -60,62 +59,61 @@ public class Main {
             return gson.toJson(user);
         });
 
-        // POST /users/:id — Add new user
+        // Add a new user
         post("/users/:id", (req, res) -> {
             res.type("application/json");
-            String id = req.params(":id");
-
-            if (users.containsKey(id)) {
-                res.status(409);
-                return gson.toJson(Map.of("error", "User already exists"));
-            }
-
-            User user = gson.fromJson(req.body(), User.class);
-            users.put(id, user);
+            int id = Integer.parseInt(req.params(":id"));
+            User newUser = gson.fromJson(req.body(), User.class);
+            users.put(id, newUser);
+            logger.info("POST /users/:id - Added new user with ID {}", id);
             res.status(201);
-            return gson.toJson(Map.of("message", "User added successfully", "user", user));
+            return gson.toJson(Map.of("message", "User added successfully"));
         });
 
-        // PUT /users/:id — Edit an existing user
+        // Update an existing user
         put("/users/:id", (req, res) -> {
             res.type("application/json");
-            String id = req.params(":id");
-
-            User existing = users.get(id);
-            if (existing == null) {
+            int id = Integer.parseInt(req.params(":id"));
+            User updatedUser = gson.fromJson(req.body(), User.class);
+            if (!users.containsKey(id)) {
                 res.status(404);
                 return gson.toJson(Map.of("error", "User not found"));
             }
-
-            User updated = gson.fromJson(req.body(), User.class);
-            users.put(id, updated);
-            return gson.toJson(Map.of("message", "User updated successfully", "user", updated));
+            users.put(id, updatedUser);
+            logger.info("PUT /users/:id - Updated user with ID {}", id);
+            return gson.toJson(Map.of("message", "User updated successfully"));
         });
 
-        // OPTIONS /users/:id — Check if a user exists
+        // Check if user exists
         options("/users/:id", (req, res) -> {
             res.type("application/json");
-            String id = req.params(":id");
-
+            int id = Integer.parseInt(req.params(":id"));
             boolean exists = users.containsKey(id);
             return gson.toJson(Map.of("exists", exists));
         });
 
-        // DELETE /users/:id — Delete a user
+        // Delete a user
         delete("/users/:id", (req, res) -> {
             res.type("application/json");
-            String id = req.params(":id");
-
+            int id = Integer.parseInt(req.params(":id"));
             User removed = users.remove(id);
             if (removed == null) {
                 res.status(404);
                 return gson.toJson(Map.of("error", "User not found"));
             }
-
-            return gson.toJson(Map.of("message", "User deleted successfully", "user", removed));
+            logger.info("DELETE /users/:id - Removed user with ID {}", id);
+            return gson.toJson(Map.of("message", "User deleted successfully"));
         });
 
-        // Log confirmation
-        logger.info("✅ All routes successfully configured.");
+        // Exception handler for unexpected errors
+        exception(Exception.class, (e, req, res) -> {
+            logger.error("Unexpected error occurred", e);
+            res.type("application/json");
+            res.status(500);
+            res.body(gson.toJson(Map.of("error", "Internal server error")));
+        });
+
+        // After filter to set JSON response type by default
+        after((req, res) -> res.type("application/json"));
     }
 }

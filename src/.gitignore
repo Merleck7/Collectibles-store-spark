@@ -1,56 +1,19 @@
-# =========================================
-# Java + Maven + Spark Project .gitignore
-# =========================================
-
-# Compiled class files
+# Maven
+/target/
 *.class
-
-# Log files
 *.log
+*.jar
+*.war
+*.ear
 
-# BlueJ / NetBeans / IntelliJ / VSCode metadata
-*.ctxt
+# IDEs
+/.idea/
+/.vscode/
 *.iml
-.idea/
-.vscode/
-*.swp
 
-# Build directories
-target/
-bin/
-out/
-build/
-
-# Maven specific
-.mvn/
-.settings/
-dependency-reduced-pom.xml
-release.properties
-
-# OS-specific files
+# OS
 .DS_Store
 Thumbs.db
-ehthumbs.db
-Icon?
 
-# Temporary files
-*.tmp
-*.bak
-*.old
-*.orig
-
-# Environment or config files
-.env
-*.properties.local
-*.config
-*.backup
-
-# Logs and reports
-logs/
-hs_err_pid*
-replay_pid*
-
-# Backup or dump folders
-backup/
-backups/
-dump/
+# Backup
+/backups/

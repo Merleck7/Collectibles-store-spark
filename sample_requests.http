@@ -1,0 +1,45 @@
+### Get all users
+GET http://localhost:4567/users
+Accept: application/json
+
+###
+
+### Get single user by ID
+GET http://localhost:4567/users/1
+Accept: application/json
+
+###
+
+### Add a new user
+POST http://localhost:4567/users/4
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "Carlos",
+  "email": "carlos@example.com"
+}
+
+###
+
+### Update a user
+PUT http://localhost:4567/users/2
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "Emilio Flores (updated)",
+  "email": "emilio.new@example.com"
+}
+
+###
+
+### Check if user exists
+OPTIONS http://localhost:4567/users/2
+Accept: application/json
+
+###
+
+### Delete a user
+DELETE http://localhost:4567/users/3
+Accept: application/json
