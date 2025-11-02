@@ -1,10 +1,6 @@
 # Maven
-/target/
-*.class
-*.log
-*.jar
-*.war
-*.ear
+/target
+
 
 # IDEs
 /.idea/
