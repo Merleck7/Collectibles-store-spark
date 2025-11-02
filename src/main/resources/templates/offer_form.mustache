@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Offer an Item</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>Offer a New Collectible Item</h1>
+    <a href="/">🏠 Back to Store</a>
+  </header>
+
+  <form action="/offer" method="post">
+    <input type="text" name="name" placeholder="Item name" required>
+    <input type="number" step="0.01" name="price" placeholder="Price" required>
+    <textarea name="description" placeholder="Description" required></textarea>
+    <button type="submit">Submit Offer</button>
+  </form>
+
+  <footer>
+    <p>🛒 Collectibles Store © 2025</p>
+  </footer>
+</body>
+</html>
+

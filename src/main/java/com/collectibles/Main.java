@@ -2,118 +2,77 @@ package com.collectibles;
 
 import static spark.Spark.*;
 import com.google.gson.Gson;
+import spark.ModelAndView;
+import spark.template.mustache.MustacheTemplateEngine;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-
+/**
+ * Sprint 2: Adds exception handling, views, and form for item offers.
+ */
 public class Main {
 
-    // Logger instance for debugging and info logs
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-
-    // Gson instance for JSON handling
     private static final Gson gson = new Gson();
 
-    // In-memory user storage (used instead of a database for simplicity)
-    private static final Map<Integer, User> users = new HashMap<>();
+    private static final Map<Integer, Item> items = new HashMap<>();
+    private static final Map<String, User> users = new HashMap<>();
 
     public static void main(String[] args) {
-
-        // Start the Spark server on port 4567
         port(4567);
+        staticFiles.location("/public");
+        logger.info("🚀 Starting Collectibles Store Web App (Sprint 2)");
 
-        // Log server startup
-        logger.info("🚀 Starting Collectibles Store API on http://localhost:4567");
+        // Set up routes and exception handling
+        configureExceptionHandling();
+        configureRoutes();
 
-        // Add some sample users for testing
-        users.put(1, new User(1, "Luis Mendoza", "luis@example.com"));
-        users.put(2, new User(2, "Emilio Flores", "emilio@example.com"));
-        users.put(3, new User(3, "Ana Torres", "ana@example.com"));
+        // Load some initial demo data
+        users.put("1", new User(1, "Luis Mendoza", "luis@example.com"));
+        items.put(1, new Item(1, "Iron Man Figure", 49.99, "6-inch collectible"));
+        items.put(2, new Item(2, "Spider-Man Poster", 19.99, "Limited edition"));
+    }
 
-        // Root route to check if the server is running
+    private static void configureExceptionHandling() {
+        exception(ApiException.class, (ex, req, res) -> {
+            res.status(((ApiException) ex).getStatusCode());
+            res.type("application/json");
+            res.body(gson.toJson(Map.of("error", ex.getMessage())));
+            logger.error("❌ API Exception: " + ex.getMessage());
+        });
+
+        notFound((req, res) -> {
+            res.type("application/json");
+            return gson.toJson(Map.of("error", "Route not found"));
+        });
+    }
+
+    private static void configureRoutes() {
+        // Home route - renders index.html
         get("/", (req, res) -> {
-            res.type("application/json");
-            return gson.toJson(Map.of(
-                "message", "Welcome to the Collectibles Store API 👋",
-                "available_routes", List.of("/users", "/users/:id")
-            ));
-        });
+            Map<String, Object> model = new HashMap<>();
+            model.put("title", "Collectibles Store");
+            model.put("items", items.values());
+            return new ModelAndView(model, "index.mustache");
+        }, new MustacheTemplateEngine());
 
-        // Retrieve all users
-        get("/users", (req, res) -> {
-            res.type("application/json");
-            logger.info("GET /users - Retrieving all users");
-            return gson.toJson(users.values());
-        });
+        // Display offer form
+        get("/offer", (req, res) -> new ModelAndView(new HashMap<>(), "offer_form.mustache"),
+            new MustacheTemplateEngine());
 
-        // Retrieve user by ID
-        get("/users/:id", (req, res) -> {
-            res.type("application/json");
-            int id = Integer.parseInt(req.params(":id"));
-            User user = users.get(id);
-            if (user == null) {
-                res.status(404);
-                return gson.toJson(Map.of("error", "User not found"));
-            }
-            return gson.toJson(user);
-        });
+        // Handle form submission
+        post("/offer", (req, res) -> {
+            String name = req.queryParams("name");
+            double price = Double.parseDouble(req.queryParams("price"));
+            String description = req.queryParams("description");
 
-        // Add a new user
-        post("/users/:id", (req, res) -> {
-            res.type("application/json");
-            int id = Integer.parseInt(req.params(":id"));
-            User newUser = gson.fromJson(req.body(), User.class);
-            users.put(id, newUser);
-            logger.info("POST /users/:id - Added new user with ID {}", id);
-            res.status(201);
-            return gson.toJson(Map.of("message", "User added successfully"));
-        });
+            int id = items.size() + 1;
+            Item newItem = new Item(id, name, price, description);
+            items.put(id, newItem);
 
-        // Update an existing user
-        put("/users/:id", (req, res) -> {
-            res.type("application/json");
-            int id = Integer.parseInt(req.params(":id"));
-            User updatedUser = gson.fromJson(req.body(), User.class);
-            if (!users.containsKey(id)) {
-                res.status(404);
-                return gson.toJson(Map.of("error", "User not found"));
-            }
-            users.put(id, updatedUser);
-            logger.info("PUT /users/:id - Updated user with ID {}", id);
-            return gson.toJson(Map.of("message", "User updated successfully"));
+            res.redirect("/");
+            return null;
         });
-
-        // Check if user exists
-        options("/users/:id", (req, res) -> {
-            res.type("application/json");
-            int id = Integer.parseInt(req.params(":id"));
-            boolean exists = users.containsKey(id);
-            return gson.toJson(Map.of("exists", exists));
-        });
-
-        // Delete a user
-        delete("/users/:id", (req, res) -> {
-            res.type("application/json");
-            int id = Integer.parseInt(req.params(":id"));
-            User removed = users.remove(id);
-            if (removed == null) {
-                res.status(404);
-                return gson.toJson(Map.of("error", "User not found"));
-            }
-            logger.info("DELETE /users/:id - Removed user with ID {}", id);
-            return gson.toJson(Map.of("message", "User deleted successfully"));
-        });
-
-        // Exception handler for unexpected errors
-        exception(Exception.class, (e, req, res) -> {
-            logger.error("Unexpected error occurred", e);
-            res.type("application/json");
-            res.status(500);
-            res.body(gson.toJson(Map.of("error", "Internal server error")));
-        });
-
-        // After filter to set JSON response type by default
-        after((req, res) -> res.type("application/json"));
     }
 }
