@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Price Updates</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #101820;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 { color: #00FFFF; }
+    .price {
+      background: #1E1E2E;
+      padding: 1rem;
+      margin: 1rem auto;
+      border-radius: 10px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>💰 Real-Time Price Updates</h1>
+  <div id="prices"></div>
+
+  <script>
+    const ws = new WebSocket("ws://localhost:4567/ws/prices");
+    const pricesContainer = document.getElementById("prices");
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      pricesContainer.innerHTML = `<div class="price">Item: ${data.item}<br>New Price: $${data.price}</div>`;
+    };
+  </script>
+</body>
+</html>

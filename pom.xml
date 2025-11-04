@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <!-- Basic Maven project metadata -->
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.collectibles</groupId>
     <artifactId>collectibles-store</artifactId>
     <version>1.0.0</version>
@@ -14,6 +14,7 @@
     <name>Collectibles Store API</name>
     <description>API service for managing users in an online collectibles store using Spark Java.</description>
 
+    <!-- Java and project encoding settings -->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -21,42 +22,58 @@
     </properties>
 
     <dependencies>
-        <!-- Spark Java framework -->
+        <!-- Spark Java Framework (main web framework) -->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>2.9.4</version>
         </dependency>
+
+        <!-- Mustache Template Engine (for rendering HTML views) -->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-template-mustache</artifactId>
             <version>2.7.1</version>
         </dependency>
 
-        <!-- Gson for JSON serialization -->
+        <!-- Gson for JSON serialization/deserialization -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
 
-        <!-- Logback + SLF4J for logging -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.5.6</version>
-        </dependency>
-
+        <!-- SLF4J Simple Logger (console logging) -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.4</version>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
+        <!-- ✅ Jetty WebSocket server (compatible version used by Spark 2.9.4) -->
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>9.4.44.v20210927</version>
+        </dependency>
+
+        <!-- ✅ Explicitly include compatible Jetty server and util versions 
+             to fix the NoSuchMethodError (caused by version mismatch) -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.4.44.v20210927</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>9.4.44.v20210927</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Plugin para empaquetar dependencias en un solo JAR -->
+            <!-- Assembly Plugin: creates a single executable JAR with all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -82,7 +99,7 @@
                 </executions>
             </plugin>
 
-            <!-- Plugin para ejecutar la app directamente -->
+            <!-- Exec Plugin: allows running the app directly via 'mvn exec:java' -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
