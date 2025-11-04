@@ -123,18 +123,24 @@ public class Main {
             return null;
         });
 
-        // 🔍 Filter items by name or price range
+        // 🔍 Filter items by name or price range (safe conversion)
         get("/filter", (req, res) -> {
             String nameFilter = req.queryParams("name");
             String minPriceParam = req.queryParams("min");
             String maxPriceParam = req.queryParams("max");
 
-            double minPrice = minPriceParam != null ? Double.parseDouble(minPriceParam) : 0.0;
-            double maxPrice = maxPriceParam != null ? Double.parseDouble(maxPriceParam) : Double.MAX_VALUE;
+            // ✅ Validate and parse numeric fields only if not empty
+            Double minPrice = (minPriceParam != null && !minPriceParam.isEmpty())
+                    ? Double.parseDouble(minPriceParam)
+                    : null;
+            Double maxPrice = (maxPriceParam != null && !maxPriceParam.isEmpty())
+                    ? Double.parseDouble(maxPriceParam)
+                    : null;
 
             List<Item> filteredItems = items.values().stream()
                     .filter(i -> (nameFilter == null || i.getName().toLowerCase().contains(nameFilter.toLowerCase())) &&
-                            i.getPrice() >= minPrice && i.getPrice() <= maxPrice)
+                            (minPrice == null || i.getPrice() >= minPrice) &&
+                            (maxPrice == null || i.getPrice() <= maxPrice))
                     .toList();
 
             res.type("application/json");
