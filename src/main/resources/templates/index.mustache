@@ -7,21 +7,41 @@
 </head>
 <body>
   <header>
-    <h1>{{title}}</h1>
-    <a href="/offer">➕ Add New Offer</a>
+    <h1>🧩 {{title}}</h1>
+    <nav>
+      <a href="/">🏠 Home</a>
+      <a href="/offer">➕ New Offer</a>
+    </nav>
   </header>
 
-  {{#items}}
-  <div class="item">
-    <h3>{{name}}</h3>
-    <p>{{description}}</p>
-    <p class="price">$ {{price}}</p>
-  </div>
-  {{/items}}
+  <section id="filters">
+    <h2>🔍 Filter Items</h2>
+    <input type="text" id="nameFilter" placeholder="Search by name">
+    <input type="number" id="minPrice" placeholder="Min price">
+    <input type="number" id="maxPrice" placeholder="Max price">
+    <button id="filterBtn">Apply</button>
+  </section>
 
-  <footer>
-    <p>🛒 Collectibles Store © 2025</p>
-  </footer>
+  <section id="items">
+    <h2>🛒 Available Collectibles</h2>
+    <div id="itemList">
+      {{#items}}
+        <div class="item">
+          <h3>{{name}}</h3>
+          <p>{{description}}</p>
+          <span class="price">$ {{price}}</span>
+        </div>
+      {{/items}}
+      {{^items}}
+        <p>No items available at the moment.</p>
+      {{/items}}
+    </div>
+  </section>
+
+  <div id="updates" style="margin-top:20px;color:#0b0;">
+    <!-- Mensajes en tiempo real -->
+  </div>
+
+  <script src="/price-updates.js"></script>
 </body>
 </html>
-

@@ -1,64 +1,85 @@
-# 🛒 Collectibles Store (Sprint 2)
+# 🛒 Collectibles Store
 
 ## 🚀 Overview
 
-**Collectibles Store** is a Spark Java web application that allows users to view collectible items and submit new offers through a web form.  
-This version implements **exception handling**, **dynamic Mustache templates**, and **modern styling** with CSS.
+**Collectibles Store** is a complete Spark Java web application that allows users to view collectible items, add new offers through a web form, and receive **real-time price updates** using **WebSockets**.  
+This Sprint introduces advanced features like **filtering by name and price range**, **dynamic Mustache templates**, and a fully functional **.jar executable build**.
 
 ---
 
 ## 🧩 Features
 
-✅ Custom exception handling (`ApiException.java`)  
-✅ Dynamic views using Mustache templates  
-✅ Web form for submitting new collectible offers  
-✅ Static file serving (CSS)  
-✅ Two default items displayed on startup  
-✅ Modular and easy to extend
+✅ Dynamic item listing with Mustache templates  
+✅ Form to submit new collectible offers  
+✅ Item filtering by name, minimum and maximum price  
+✅ Real-time updates with WebSocket (`/price-updates`)  
+✅ Custom error handling for exceptions and missing routes  
+✅ Static file serving (CSS, JS)  
+✅ Fully packaged executable `.jar`  
+✅ Modular and scalable project structure  
 
 ---
 
 ## 🗂 Project Structure
 
 ```
-src/
-│ └── main/
-│     ├── java/
-│     │   └── com/collectibles/
-│     │       ├── Main.java
-│     │       ├── User.java
-│     │       ├── Item.java
-│     │       └── ApiException.java
-│     │
-│     └── resources/
-│        ├── templates/
-│        │   ├── index.mustache
-│        │   └── offer_form.mustache
-│        └── public/
-│            └── style.css
-├──  README.md
-├──  pom.xml
-├──  sameple_requests.http          
-└── .gitignore 
+collectibles-store-spark/
+│
+├── 📂 src/
+│   └── 📂 main/
+│       ├── 📂 java/
+│       │   └── 📂 com/
+│       │       └── 📂 collectibles/
+│       │           ├── 📂 filters/
+│       │           │   └── 📄 ItemFilter.java
+│       │           │
+│       │           ├── 📂 models/
+│       │           │   └── 📄 Item.java
+│       │           │
+│       │           ├── 📂 websocket/
+│       │           │   └── 📄 PriceWebSocket.java
+│       │           │
+│       │           ├── 📄 ApiException.java
+│       │           ├── 📄 Item.java
+│       │           ├── 📄 Main.java
+│       │           └── 📄 User.java
+│       │
+│       └── 📂 resources/
+│           ├── 📂 public/
+│           │   ├── 📜 price-updates.js
+│           │   ├── 📜 prices.html
+│           │   └── 🎨 style.css
+│           │
+│           └── 📂 templates/
+│               ├── 🧩 index.mustache
+│               └── 🧩 offer_form.mustache
+│
+├── 📂 target/
+│
+├── ⚙ .gitignore
+├── 📦 pom.xml
+├── 📝 README.md
+└── 🔍 sample_requests.http
 ```
 
 ---
 
 ## ⚙️ Setup & Run
 
-### 1️⃣ Compile the project
+### 1️⃣ Compile the project and generate the `.jar`
 ```bash
-mvn clean package
+mvn clean compile assembly:single
 ```
 
 ### 2️⃣ Run the app
 ```bash
-java -cp target/collectibles-store-1.0.0-jar-with-dependencies.jar com.collectibles.Main
+java -jar target/collectibles-store-1.0.0-jar-with-dependencies.jar
 ```
 
 ### 3️⃣ Access the web app
 - 🏠 [http://localhost:4567/](http://localhost:4567/) → View collectibles  
 - ➕ [http://localhost:4567/offer](http://localhost:4567/offer) → Add new item  
+- ⚙️ [http://localhost:4567/test](http://localhost:4567/test) → Server test route  
 
 ---
 
@@ -71,9 +92,44 @@ java -cp target/collectibles-store-1.0.0-jar-with-dependencies.jar com.collectib
 
 ---
 
+## 🔍 Filtering API
+
+You can filter collectibles using query parameters:
+
+**Endpoint:**  
+```
+GET /filter?name=man&min=10&max=50
+```
+
+**Example Response:**
+```json
+[
+  {
+    "name": "Iron Man Figure",
+    "price": 49.99,
+    "description": "6-inch collectible"
+  }
+]
+```
+
+---
+
+## 🔄 WebSocket: Real-Time Price Updates
+
+The app integrates a **WebSocket server** to broadcast price updates to all connected clients.
+
+**Endpoint:**  
+```
+ws://localhost:4567/price-updates
+```
+
+Whenever a price change or new offer is registered, all active clients receive the update instantly.
+
+---
+
 ## 💡 Exception Handling
 
-Custom API exceptions are handled through the `ApiException` class:
+Handled globally using a custom exception class:
 
 ```java
 exception(ApiException.class, (ex, req, res) -> {
@@ -83,45 +139,37 @@ exception(ApiException.class, (ex, req, res) -> {
 });
 ```
 
-If a route or resource is not found, a JSON error is returned:
+If a route or resource is not found:
 ```json
 {"error": "Route not found"}
 ```
 
 ---
 
-## 🎨 Styling Preview
+## 🎨 Styling & UI
 
-Includes a responsive design and card layout with gradients and shadows:
+Includes a modern responsive design:
 
-- Modern header with gradient
-- Centered cards for items
-- Form with rounded inputs and hover animations
-
----
-
-## 🧠 Partial Review Checklist
-
-✅ Exception handling tested with invalid routes  
-✅ Form submissions validated  
-✅ CSS loaded from `/public`  
-✅ Peer review completed for logic and integration consistency  
+- Gradient header  
+- Centered item cards  
+- Animated buttons and inputs  
+- Responsive layout for mobile  
+- Visual alerts for WebSocket notifications  
 
 ---
 
-## 💾 Commit Message Suggestion
+## 🧠 Final Sprint 3 Checklist
 
-```
-✨ Sprint 2 Complete: Added views, styling, and exception handling
-- Added Mustache templates for index and offer form
-- Implemented static file serving for CSS
-- Introduced ApiException module
-- Created Item model and integrated form logic
-- Enhanced UI with modern styling
-```
+✅ Dynamic templates working with Mustache  
+✅ Form submission for new collectibles  
+✅ Price and name filtering via query params  
+✅ WebSocket updates for connected users  
+✅ Exception handling for all routes  
+✅ `.jar` build tested and running  
+✅ Code reviewed and documented  
 
 ---
 
 ## 👨‍💻 Authors
-**Luis Mendoza** & **Emilio Flores Licea**   
+**Luis Mendoza** & **Emilio Flores Licea**  
 [GitHub](https://github.com/Merleck7) • [LinkedIn](https://www.linkedin.com/in/luismendoza2007/)
