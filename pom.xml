@@ -4,7 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!-- Basic Maven project metadata -->
+    <!-- ============================================================
+         📦 Collectibles Store API - Maven Configuration
+         This project uses Spark Java to serve dynamic web pages
+         and a REST API for collectible item management.
+         ============================================================ -->
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.collectibles</groupId>
     <artifactId>collectibles-store</artifactId>
@@ -12,68 +17,80 @@
     <packaging>jar</packaging>
 
     <name>Collectibles Store API</name>
-    <description>API service for managing users in an online collectibles store using Spark Java.</description>
+    <description>Web application using Spark Java, Mustache templates, and Gson for managing collectibles.</description>
 
-    <!-- Java and project encoding settings -->
+    <!-- ============================================================
+         ⚙️ Java and encoding setup
+         - Using Java 17 for compatibility with Spark 2.9.4
+         - UTF-8 ensures proper handling of special characters
+         ============================================================ -->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <file.encoding>UTF-8</file.encoding>
     </properties>
 
+    <!-- ============================================================
+         🧩 Dependencies
+         ============================================================ -->
     <dependencies>
-        <!-- Spark Java Framework (main web framework) -->
+
+        <!-- 🚀 Spark Java Framework -->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>2.9.4</version>
         </dependency>
 
-        <!-- Mustache Template Engine (for rendering HTML views) -->
+        <!-- 🧱 Mustache Template Engine for dynamic HTML rendering -->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-template-mustache</artifactId>
             <version>2.7.1</version>
         </dependency>
 
-        <!-- Gson for JSON serialization/deserialization -->
+        <!-- 🔄 Gson for JSON serialization/deserialization -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
 
-        <!-- SLF4J Simple Logger (console logging) -->
+        <!-- 🪵 Simple logging through SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
         </dependency>
 
-        <!-- ✅ Jetty WebSocket server (compatible version used by Spark 2.9.4) -->
+        <!-- ✅ Jetty Server & WebSocket (updated to secure version) -->
+        <!-- These versions fix known CVEs detected by dependency scanners -->
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
-            <version>9.4.44.v20210927</version>
+            <version>9.4.54.v20240208</version>
         </dependency>
-
-        <!-- ✅ Explicitly include compatible Jetty server and util versions 
-             to fix the NoSuchMethodError (caused by version mismatch) -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.4.44.v20210927</version>
+            <version>9.4.54.v20240208</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>9.4.44.v20210927</version>
+            <version>9.4.54.v20240208</version>
         </dependency>
+
     </dependencies>
 
+    <!-- ============================================================
+         ⚒️ Build Configuration
+         ============================================================ -->
     <build>
         <plugins>
-            <!-- Assembly Plugin: creates a single executable JAR with all dependencies -->
+
+            <!-- 🧩 Assembly Plugin: builds a single JAR with all dependencies included -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -84,6 +101,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
+                            <!-- The main entry point for the application -->
                             <mainClass>com.collectibles.Main</mainClass>
                         </manifest>
                     </archive>
@@ -99,15 +117,22 @@
                 </executions>
             </plugin>
 
-            <!-- Exec Plugin: allows running the app directly via 'mvn exec:java' -->
+            <!-- ▶️ Exec Plugin: allows running the app via `mvn exec:java` -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
                     <mainClass>com.collectibles.Main</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>file.encoding</key>
+                            <value>UTF-8</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
