@@ -123,5 +123,5 @@ Includes a responsive design and card layout with gradients and shadows:
 ---
 
 ## 👨‍💻 Authors
-**Luis Mendoza** & ** Emilio Flores Licea**   
+**Luis Mendoza** & **Emilio Flores Licea**   
 [GitHub](https://github.com/Merleck7) • [LinkedIn](https://www.linkedin.com/in/luismendoza2007/)
