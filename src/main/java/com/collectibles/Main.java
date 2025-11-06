@@ -44,9 +44,23 @@ public class Main {
         users.put("1", new User(1, "Luis Mendoza", "luis@example.com"));
         users.put("2", new User(2, "Ana Torres", "ana@example.com"));
 
-        items.put(1, new Item(1, "Iron Man Figure", 49.99, "6-inch collectible"));
-        items.put(2, new Item(2, "Spider-Man Poster", 19.99, "Limited edition"));
-        items.put(3, new Item(3, "Batman Statue", 79.99, "Exclusive edition"));
+        // 🧩 Collectible items list (extended)
+        items.put(1, new Item(1, "Holographic Pikachu Card", 249.99,
+                "A rare 25th Anniversary Edition holographic Pikachu card, perfectly preserved in a crystal acrylic case. A must-have for Pokémon fans seeking both nostalgia and long-term value."));
+        items.put(2, new Item(2, "Iron Man Nano Gauntlet Replica", 499.00,
+                "Crafted from high-grade aluminum and LED-lit gemstones, this 1:1 replica of Iron Man’s Nano Gauntlet features authentic sounds and light-up Infinity Stones. The perfect centerpiece for Marvel collectors."));
+        items.put(3, new Item(3, "Baby Yoda (Grogu) Plush Limited Edition", 89.99,
+                "Soft, detailed, and expressive — this official Lucasfilm collectible captures the gentle curiosity of Grogu. Comes in eco-friendly packaging and includes an adoption certificate."));
+        items.put(4, new Item(4, "Cyberpunk Samurai Katana", 329.50,
+                "Inspired by Cyberpunk 2077, this steel katana replica glows with an LED neon edge effect and features an engraved blade with the Arasaka insignia. A fusion of tradition and futuristic style."));
+        items.put(5, new Item(5, "Legend of Zelda: Master Sword Replica", 279.00,
+                "Faithfully recreated with a steel blade and wooden hilt, this full-scale Master Sword includes a decorative pedestal base. Ideal for fans seeking to bring Hyrule’s magic into their home."));
+        items.put(6, new Item(6, "Funko Pop! Spider-Man (Miles Morales Edition)", 34.99,
+                "A vibrant collectible from the Spider-Verse series, showcasing Miles Morales in his signature electric suit. Comes in a special-edition box with foil detailing and a numbered certificate."));
+        items.put(7, new Item(7, "Retro Game Boy Color – Transparent Purple", 189.00,
+                "Original refurbished Game Boy Color in its iconic translucent shell. Fully functional and includes a protective display stand — a nostalgic gem for any retro gamer’s shelf."));
+        items.put(8, new Item(8, "Star Wars Lightsaber – Darth Vader Edition", 429.99,
+                "An official high-fidelity replica from the Black Series collection. Features a metal hilt, realistic sound effects, and a removable red blade for display or dueling practice."));
 
         // 3️⃣ Configure routes and error handling
         configureExceptionHandling();
