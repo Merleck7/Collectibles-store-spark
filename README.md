@@ -58,8 +58,8 @@ collectibles-store-spark/
 │
 ├── ⚙ .gitignore
 ├── 📦 pom.xml
-├── 📝 README.md
-└── 🔍 sample_requests.http
+└── 📝 README.md
+
 ```
 
 ---
@@ -167,6 +167,13 @@ Includes a modern responsive design:
 ✅ Exception handling for all routes  
 ✅ `.jar` build tested and running  
 ✅ Code reviewed and documented  
+
+---
+
+## 👨‍💻 Authors
+**Luis Mendoza** & **Emilio Flores Licea**  
+[GitHub](https://github.com/Merleck7) • [LinkedIn](https://www.linkedin.com/in/luismendoza2007/)
+  
 
 ---
 

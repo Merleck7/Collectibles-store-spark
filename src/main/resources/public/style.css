@@ -1,81 +1,207 @@
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #0f172a;
-  color: #e2e8f0;
+/* ====== GLOBAL STYLES ====== */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Poppins", Arial, sans-serif;
 }
 
+body {
+  background: linear-gradient(135deg, #1e1f29, #2a2b38);
+  color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ====== HEADER ====== */
 header {
-  background: #1e293b;
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  padding: 20px 0;
   text-align: center;
-  border-bottom: 2px solid #38bdf8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-h1, h2 {
-  color: #38bdf8;
+header h1 {
+  font-size: 2rem;
+  color: #00ffc6;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 nav a {
-  margin: 0 10px;
   text-decoration: none;
-  color: #94a3b8;
+  color: #ffffffcc;
+  font-weight: 500;
   transition: color 0.3s;
 }
 
 nav a:hover {
-  color: #38bdf8;
+  color: #00ffc6;
 }
 
-section {
+/* ====== FILTERS ====== */
+#filters {
+  background: rgba(255, 255, 255, 0.07);
   padding: 20px;
+  border-radius: 12px;
+  margin-top: 30px;
+  width: 90%;
+  max-width: 700px;
   text-align: center;
 }
 
+#filters h2 {
+  margin-bottom: 15px;
+  color: #00ffc6;
+}
+
+#filters input {
+  margin: 5px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  width: 30%;
+}
+
+#filterBtn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #00ffc6;
+  color: #1e1f29;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#filterBtn:hover {
+  background: #00d9aa;
+}
+
+/* ====== ITEMS ====== */
+#items {
+  margin-top: 40px;
+  width: 90%;
+  max-width: 900px;
+}
+
+#items h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00ffc6;
+}
+
+#itemList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
 .item {
-  background: #1e293b;
-  margin: 10px auto;
-  padding: 15px;
-  border-radius: 10px;
-  width: 300px;
-  transition: transform 0.2s;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 255, 198, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .item:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 255, 198, 0.3);
 }
 
-.price {
-  display: block;
-  font-size: 1.2em;
-  color: #22d3ee;
+.item h3 {
+  color: #fff;
+  margin-bottom: 10px;
 }
 
+.item p {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.item .price {
+  color: #00ffc6;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* ====== OFFER FORM ====== */
 .offer-form {
-  width: 300px;
-  margin: 30px auto;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 30px;
+  border-radius: 12px;
+  margin-top: 40px;
+  width: 90%;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
-.offer-form input, .offer-form textarea {
-  margin-bottom: 10px;
-  padding: 8px;
+.offer-form label {
+  font-weight: bold;
+  color: #00ffc6;
+  text-align: left;
+}
+
+.offer-form input,
+.offer-form textarea {
+  padding: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  outline: none;
+}
+
+.offer-form textarea {
+  resize: none;
+  height: 100px;
 }
 
 .offer-form button {
-  background: #38bdf8;
+  margin-top: 10px;
+  padding: 12px;
   border: none;
-  padding: 10px;
-  color: #0f172a;
   border-radius: 8px;
-  cursor: pointer;
+  background: #00ffc6;
+  color: #1e1f29;
   font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .offer-form button:hover {
-  background: #22d3ee;
+  background: #00d9aa;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 600px) {
+  #filters input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #itemList {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-form {
+    padding: 20px;
+  }
 }
