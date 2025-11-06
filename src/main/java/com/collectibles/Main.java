@@ -27,7 +27,6 @@ public class Main {
 
     // In-memory data storage (mock database)
     private static final Map<Integer, Item> items = new HashMap<>();
-    private static final Map<String, User> users = new HashMap<>();
 
     // WebSocket sessions for real-time updates
     private static final Set<Session> webSocketSessions = ConcurrentHashMap.newKeySet();
@@ -39,10 +38,6 @@ public class Main {
         staticFiles.location("/public"); // Serve static files from src/main/resources/public
 
         logger.info("🚀 Starting Collectibles Store Web App (Sprint 3)");
-
-        // 2️⃣ Initialize sample data (temporary mock database)
-        users.put("1", new User(1, "Luis Mendoza", "luis@example.com"));
-        users.put("2", new User(2, "Ana Torres", "ana@example.com"));
 
         // 🧩 Collectible items list (extended)
         items.put(1, new Item(1, "Holographic Pikachu Card", 249.99,
@@ -107,12 +102,6 @@ public class Main {
             model.put("items", items.values());
             return new ModelAndView(model, "index.mustache");
         }, new MustacheTemplateEngine());
-
-        // 👥 List all users (JSON)
-        get("/users", (req, res) -> {
-            res.type("application/json");
-            return gson.toJson(users.values());
-        });
 
         // 📄 Offer submission form
         get("/offer", (req, res) ->
