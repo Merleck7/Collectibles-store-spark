@@ -173,10 +173,3 @@ Includes a modern responsive design:
 ## 👨‍💻 Authors
 **Luis Mendoza** & **Emilio Flores Licea**  
 [GitHub](https://github.com/Merleck7) • [LinkedIn](https://www.linkedin.com/in/luismendoza2007/)
-  
-
----
-
-## 👨‍💻 Authors
-**Luis Mendoza** & **Emilio Flores Licea**  
-[GitHub](https://github.com/Merleck7) • [LinkedIn](https://www.linkedin.com/in/luismendoza2007/)
